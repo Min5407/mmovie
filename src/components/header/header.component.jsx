@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./header.style.scss";
+
+import Loading from "../loading/loading.component";
+
 import { fetchHeaderMovie, imageUrl } from "../../api";
 import Youtube from "react-youtube";
 import movieTrailer from "movie-trailer";
 
-const Header = () => {
+const Header = ({ setheaderLoading }) => {
   const [movie, setMovie] = useState(null);
   const [trailer, setTrailer] = useState(null);
 
@@ -15,7 +18,6 @@ const Header = () => {
       autoplay: 1,
     },
   };
-  console.log(movie);
 
   useEffect(() => {
     const recentMovie = async () => {
@@ -23,8 +25,8 @@ const Header = () => {
         let {
           data: { results },
         } = await fetchHeaderMovie();
-        console.log(results[1].poster_path);
         setMovie(results[1]);
+        setheaderLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -36,7 +38,6 @@ const Header = () => {
   useEffect(() => {
     if (movie) {
       movieTrailer(movie.original_title).then((url) => {
-        console.log(url);
         //https://www.youtube.com/watch?v=ZTs37z_FYZw
         const urlSearch = new URL(url).search;
         //urlSearch will get everything after ? mark
@@ -64,10 +65,15 @@ const Header = () => {
             <Youtube videoId={trailer} opts={opts} />
           </div>
         </div>
+        <div className="shadowBottom"></div>
       </div>
     );
   } else {
-    return <div> Loading </div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 };
 
