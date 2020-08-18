@@ -8,7 +8,7 @@ const Row = ({ title, data }) => {
   return (
     <div className="row">
       <span>
-        {title} <span> Scroll Sides -></span>
+        {title} <span> Scroll Sides -{">"}</span>
       </span>
 
       <div className="rowImage">
